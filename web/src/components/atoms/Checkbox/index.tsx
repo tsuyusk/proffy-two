@@ -7,13 +7,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
 }
 
-const Checkbox: React.FC<InputProps> = ({
-  placeholder,
-  label,
-  type,
-  name,
-  ...rest
-}) => {
+const Checkbox: React.FC<InputProps> = ({ label, type, name, ...rest }) => {
   const checkboxRef = useRef<HTMLInputElement>(null);
 
   return (

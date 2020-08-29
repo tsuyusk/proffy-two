@@ -16,7 +16,6 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const Input: React.FC<InputProps> = ({
   containerStyle,
-  placeholder,
   label,
   type,
   name,
@@ -72,7 +71,6 @@ const Input: React.FC<InputProps> = ({
                 : 'password'
               : type || 'text'
           }
-          placeholder={placeholder}
           {...rest}
         />
         {type === 'password' && (
