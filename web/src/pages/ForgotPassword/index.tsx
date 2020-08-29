@@ -24,7 +24,12 @@ const ForgotPassword: React.FC = () => {
         <Form>
           <h1>Eita, esqueceu sua senha?</h1>
           <p>Não esquenta, vamos dar um jeito nisso.</p>
-          <Input placeholder="E-mail" type="email" />
+          <Input
+            name="email"
+            label="E-mail"
+            placeholder="E-mail"
+            type="email"
+          />
           <Button containerStyle={{ marginTop: 15 }}>Enviar</Button>
         </Form>
       </ContentWrapper>

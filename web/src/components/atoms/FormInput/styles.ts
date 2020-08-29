@@ -9,20 +9,20 @@ interface ContainerProps {
 export const Container = styled.label<ContainerProps>`
   position: relative;
   display: flex;
+  width: 100%;
   cursor: text;
-  flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
   border-radius: 8px;
-  width: 350px;
-  height: 72px;
-  padding: 4px 12px;
+  justify-content: center;
+  height: 56px;
   border: 1px solid ${props => props.theme.linesInWhite};
   background: ${props => props.theme.shape2};
 
   > label {
     position: absolute;
-    cursor: text;
     font-size: 14px;
+    left: 10px;
+    cursor: text;
     top: 50%;
     transform: translateY(-50%);
     transition: top 0.3s ease-out;
@@ -31,21 +31,17 @@ export const Container = styled.label<ContainerProps>`
     ${props =>
       (props.isFocused || props.isFilled) &&
       css`
-        top: 10%;
-      `};
-  }
-
-  & + div {
-    border-top: 0;
+        top: 15%;
+      `}
   }
 
   &::before {
     content: '';
     position: absolute;
     left: -2px;
-    top: 20%;
     width: 2px;
     height: 60%;
+
     background: ${props => props.theme.purple};
     transform: scale(0, 0);
     transition: transform 0.3s ease-out;
@@ -58,24 +54,16 @@ export const Container = styled.label<ContainerProps>`
   }
 
   > div {
+    flex: 1;
     display: flex;
-    align-items: center;
-    justify-content: center;
     height: 80%;
-    margin-top: 15px;
     > input {
+      margin: 15px 0 0 10px;
       flex: 1;
       background: transparent;
       border: 0;
     }
   }
-`;
-
-export const CheckboxContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-width: 130px;
 `;
 
 export const ToggleView = styled.button`

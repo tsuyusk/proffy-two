@@ -8,20 +8,19 @@ import React, {
 import unActivatedToggleVisibilityIcon from '../../../assets/unActivatedToggleVisibilityIcon.svg';
 import activatedToggleVisibilityIcon from '../../../assets/activatedToggleVisibilityIcon.svg';
 
-import { Container, CheckboxContainer, ToggleView } from './styles';
+import { Container, ToggleView } from './styles';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label: string;
   name: string;
+  label: string;
   containerStyle?: object;
 }
 
 const Input: React.FC<InputProps> = ({
   containerStyle,
-  placeholder,
+  name,
   label,
   type,
-  name,
   ...rest
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -42,15 +41,6 @@ const Input: React.FC<InputProps> = ({
   const handleToggleView = useCallback(() => {
     setIsVisible(state => !state);
   }, []);
-
-  if (type === 'checkbox') {
-    return (
-      <CheckboxContainer>
-        <input ref={inputRef} id={name} type="checkbox" />
-        <label htmlFor={name}>{label}</label>
-      </CheckboxContainer>
-    );
-  }
 
   return (
     <Container
@@ -74,7 +64,6 @@ const Input: React.FC<InputProps> = ({
                 : 'password'
               : type || 'text'
           }
-          placeholder={placeholder}
           {...rest}
         />
         {type === 'password' && (

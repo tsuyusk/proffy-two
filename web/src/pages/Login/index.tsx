@@ -24,11 +24,11 @@ const Login: React.FC = () => {
       <ContentWrapper>
         <Form>
           <h1>Fazer login</h1>
-          <Input placeholder="E-mail" type="email" />
-          <Input placeholder="Senha" type="password" />
+          <Input name="email" label="E-mail" type="email" />
+          <Input name="password" label="Senha" type="password" />
           <Button containerStyle={{ marginTop: 15 }}>Entrar</Button>
           <Options>
-            <Input type="checkbox" placeholder="Lembrar-me" />
+            <Input name="remember-me" type="checkbox" label="Lembrar-me" />
             <Link to="/forgot-password">Esqueci minha senha</Link>
           </Options>
         </Form>
@@ -38,7 +38,7 @@ const Login: React.FC = () => {
             <Link to="/register">Cadastre-se</Link>
           </p>
           <span>
-            É de graça{' '}
+            É de graça
             <span role="img" aria-label="Purple heart">
               💜
             </span>

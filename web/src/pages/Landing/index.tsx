@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useTheme } from 'styled-components';
 
 import studyIcon from '../../assets/study.svg';
@@ -19,7 +20,17 @@ import {
 } from './styles';
 
 const Landing: React.FC = () => {
+  const history = useHistory();
   const { purple, green } = useTheme();
+
+  const handleGoToGiveClasses = useCallback(() => {
+    history.push('/give-classes');
+  }, [history]);
+
+  const handleGoToStudy = useCallback(() => {
+    history.push('/study');
+  }, [history]);
+
   return (
     <Container>
       <ProfileHeader />
@@ -45,12 +56,12 @@ const Landing: React.FC = () => {
           </span>
         </GreetingsContainer>
         <ButtonsContainer>
-          <Button backgroundColor={purple}>
+          <Button backgroundColor={purple} onClick={handleGoToStudy}>
             <img src={studyIcon} alt="Opened book" />
             Estudar
           </Button>
 
-          <Button backgroundColor={green}>
+          <Button backgroundColor={green} onClick={handleGoToGiveClasses}>
             <img src={televisionIcon} alt="Television" />
             Dar aulas
           </Button>

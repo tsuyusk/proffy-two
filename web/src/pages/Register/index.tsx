@@ -24,10 +24,10 @@ const Register: React.FC = () => {
         <Form>
           <h1>Cadastro</h1>
           <p>Preencha os dados abaixo para começar.</p>
-          <Input placeholder="Nome" />
-          <Input placeholder="Sobrenome" />
-          <Input placeholder="E-mail" type="email" />
-          <Input placeholder="Senha" type="password" />
+          <Input name="name" label="Nome" />
+          <Input name="lastName" label="Sobrenome" />
+          <Input name="email" label="E-mail" type="email" />
+          <Input name="password" label="Senha" type="password" />
           <Button containerStyle={{ marginTop: 15 }}>Concluir cadastro</Button>
         </Form>
       </ContentWrapper>
