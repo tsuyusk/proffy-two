@@ -67,6 +67,7 @@ export const Container = styled.label<ContainerProps>`
       flex: 1;
       background: transparent;
       border: 0;
+      margin-bottom: 4px;
     }
   }
 `;
@@ -84,4 +85,8 @@ export const ToggleView = styled.button`
   width: 24px;
   height: 24px;
   margin-right: 5px;
+
+  > svg {
+    color: ${props => props.theme.purple};
+  }
 `;

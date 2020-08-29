@@ -49,6 +49,10 @@ export const SignOffButton = styled.button`
   background: ${props => shade(0.3, props.theme.purple)};
   transition: background 0.3s ease-out;
 
+  > svg {
+    color: ${props => props.theme.baseTextColorInPurple};
+  }
+
   &:hover {
     background: ${props => shade(0.4, props.theme.purple)};
   }

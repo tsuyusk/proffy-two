@@ -1,13 +1,12 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTheme } from 'styled-components';
+import { FiBookOpen, FiTv } from 'react-icons/fi';
 
-import studyIcon from '../../assets/study.svg';
-import televisionIcon from '../../assets/television.svg';
 import heroImage from '../../assets/hero.svg';
 import logoImage from '../../assets/logo.png';
 
-import ProfileHeader from '../../components/molecules/ProfileHeader';
+import ProfileHeader from '../../components/organisms/ProfileHeader';
 import {
   Container,
   ImagesContainer,
@@ -57,12 +56,12 @@ const Landing: React.FC = () => {
         </GreetingsContainer>
         <ButtonsContainer>
           <Button backgroundColor={purple} onClick={handleGoToStudy}>
-            <img src={studyIcon} alt="Opened book" />
+            <FiBookOpen />
             Estudar
           </Button>
 
           <Button backgroundColor={green} onClick={handleGoToGiveClasses}>
-            <img src={televisionIcon} alt="Television" />
+            <FiTv />
             Dar aulas
           </Button>
         </ButtonsContainer>

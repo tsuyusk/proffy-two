@@ -1,10 +1,9 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { FiCamera } from 'react-icons/fi';
 
 import Select from '../../components/atoms/Select';
 import FormInput from '../../components/atoms/FormInput';
-import CustomisableHeader from '../../components/molecules/CustomisableHeader';
+import CustomisableHeader from '../../components/organisms/CustomisableHeader';
 import Textarea from '../../components/atoms/Textarea';
 import Button from '../../components/atoms/Button';
 

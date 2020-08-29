@@ -43,3 +43,15 @@ export const HeaderContent = styled.div`
 
   color: ${props => props.theme.titleColor};
 `;
+
+export const LogoButton = styled.button`
+  background: transparent;
+  border: 0;
+
+  &:hover {
+    > img {
+      transition: transform 0.3s ease-out;
+      transform: scale(1.1, 1.1);
+    }
+  }
+`;

@@ -15,6 +15,7 @@ const Checkbox: React.FC<InputProps> = ({
   ...rest
 }) => {
   const checkboxRef = useRef<HTMLInputElement>(null);
+
   return (
     <CheckboxContainer>
       <input ref={checkboxRef} id={name} type="checkbox" {...rest} />

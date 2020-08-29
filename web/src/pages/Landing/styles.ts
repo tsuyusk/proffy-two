@@ -74,6 +74,11 @@ export const Button = styled(ButtonFromAtoms)<ButtonProps>`
   width: 250px;
   height: 72px;
 
+  > svg {
+    width: 40px;
+    height: 40px;
+  }
+
   & + button {
     margin-left: 16px;
   }

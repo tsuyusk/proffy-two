@@ -1,9 +1,4 @@
-import React, {
-  useCallback,
-  useState,
-  useRef,
-  TextareaHTMLAttributes,
-} from 'react';
+import React, { useRef, TextareaHTMLAttributes } from 'react';
 
 import { Container } from './styles';
 

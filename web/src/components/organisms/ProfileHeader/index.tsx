@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 
+import { FiPower } from 'react-icons/fi';
 import signOffIcon from '../../../assets/signOff.svg';
 import { Container, UserContainer, SignOffButton } from './styles';
 import { useHistory } from 'react-router-dom';
@@ -19,7 +20,7 @@ const ProfileHeader: React.FC = () => {
         <span>Tiago Luchtenberg</span>
       </UserContainer>
       <SignOffButton>
-        <img src={signOffIcon} alt="Sign out" />
+        <FiPower size={20} />
       </SignOffButton>
     </Container>
   );

@@ -13,6 +13,8 @@ import Landing from '../pages/Landing';
 import MyProfile from '../pages/MyProfile';
 import GiveClasses from '../pages/GiveClasses';
 import CompletedCreation from '../pages/CompletedCreation';
+import TeacherList from '../pages/TeacherList';
+import Error404 from '../pages/Error404';
 
 const Routes: React.FC = () => {
   return (
@@ -27,7 +29,8 @@ const Routes: React.FC = () => {
       <Route component={MyProfile} path="/me" />
       <Route component={GiveClasses} path="/give-classes" />
       <Route component={CompletedCreation} path="/completed-creation" />
-      <Route component={() => <h1>Error 404</h1>} path="*" />
+      <Route component={TeacherList} path="/study" />
+      <Route component={Error404} path="*" />
     </Switch>
   );
 };

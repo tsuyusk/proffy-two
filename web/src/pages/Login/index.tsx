@@ -5,6 +5,7 @@ import proffyLogo from '../../assets/logo.png';
 
 import Input from '../../components/atoms/Input';
 import Button from '../../components/atoms/Button';
+import Checkbox from '../../components/atoms/Checkbox';
 
 import {
   Container,
@@ -28,7 +29,7 @@ const Login: React.FC = () => {
           <Input name="password" label="Senha" type="password" />
           <Button containerStyle={{ marginTop: 15 }}>Entrar</Button>
           <Options>
-            <Input name="remember-me" type="checkbox" label="Lembrar-me" />
+            <Checkbox name="remember-me" type="checkbox" label="Lembrar-me" />
             <Link to="/forgot-password">Esqueci minha senha</Link>
           </Options>
         </Form>

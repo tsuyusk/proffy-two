@@ -4,9 +4,7 @@ import React, {
   useRef,
   useCallback,
 } from 'react';
-
-import unActivatedToggleVisibilityIcon from '../../../assets/unActivatedToggleVisibilityIcon.svg';
-import activatedToggleVisibilityIcon from '../../../assets/activatedToggleVisibilityIcon.svg';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 import { Container, CheckboxContainer, ToggleView } from './styles';
 
@@ -79,14 +77,7 @@ const Input: React.FC<InputProps> = ({
         />
         {type === 'password' && (
           <ToggleView type="button" onClick={handleToggleView}>
-            <img
-              src={
-                isVisible
-                  ? activatedToggleVisibilityIcon
-                  : unActivatedToggleVisibilityIcon
-              }
-              alt="Eye"
-            />
+            {isVisible ? <FiEyeOff size={22} /> : <FiEye size={22} />}
           </ToggleView>
         )}
       </div>
