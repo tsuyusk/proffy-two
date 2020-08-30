@@ -22,7 +22,9 @@ export const GlobalCss = createGlobalStyle`
   }
 
   h1, h2, h3, h4, h5, h6, strong {
-    font-weight: 600;
+    font-family: 'Archivo', 'Poppins', sans-serif;
+    color: ${props => props.theme.titleColor};
+    font-weight: 700;
   }
 
   button {
