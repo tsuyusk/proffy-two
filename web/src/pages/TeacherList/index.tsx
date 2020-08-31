@@ -1,9 +1,18 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { Container, HeaderContent, List } from './styles';
+import {
+  Container,
+  HeaderContent,
+  List,
+  HeaderForm,
+  LabelAndInput,
+  FormInput,
+} from './styles';
 import CustomisableHeader from '../../components/organisms/CustomisableHeader';
 import TeacherItem, { ClassData } from '../../components/organisms/TeacherItem';
+import Select from '../../components/atoms/Select';
+import { useTheme } from 'styled-components';
 
 const sampleClass: ClassData = {
   class: {
@@ -35,6 +44,7 @@ const sampleClass: ClassData = {
 
 const TeacherList: React.FC = () => {
   const history = useHistory();
+  const { baseTextColorInPurple } = useTheme();
 
   const handleGoBack = useCallback(() => {
     history.push('/landing');
@@ -45,9 +55,37 @@ const TeacherList: React.FC = () => {
       <CustomisableHeader pageName="Estudar" handleGoBack={handleGoBack}>
         <HeaderContent>
           <h1>Estes são os proffys disponíveis</h1>
+          <HeaderForm>
+            <Select
+              labelColor={baseTextColorInPurple}
+              label="Matéria"
+              name="subject"
+              options={[]}
+            />
+            <Select
+              labelColor={baseTextColorInPurple}
+              label="Dia da semana"
+              name="week_day"
+              options={[]}
+            />
+
+            <LabelAndInput>
+              <label htmlFor="name">Horário</label>
+              <FormInput
+                containerStyle={{ height: 69 }}
+                style={{ margin: '4px 0 0 10px' }}
+                label=""
+                name="time"
+                type="time"
+                isFlex={true}
+              />
+            </LabelAndInput>
+          </HeaderForm>
         </HeaderContent>
       </CustomisableHeader>
       <List>
+        <TeacherItem classData={sampleClass} />
+        <TeacherItem classData={sampleClass} />
         <TeacherItem classData={sampleClass} />
       </List>
     </Container>

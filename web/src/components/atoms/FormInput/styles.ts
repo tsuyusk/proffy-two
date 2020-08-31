@@ -4,12 +4,21 @@ interface ContainerProps {
   type?: string;
   isFocused: boolean;
   isFilled: boolean;
+  isFlex: boolean;
 }
 
 export const Container = styled.label<ContainerProps>`
   position: relative;
   display: flex;
-  width: 100%;
+
+  ${props =>
+    props.isFlex
+      ? css`
+          flex: 1;
+        `
+      : css`
+          width: 100%;
+        `}
   cursor: text;
   align-items: center;
   border-radius: 8px;

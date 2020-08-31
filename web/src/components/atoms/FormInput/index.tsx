@@ -8,16 +8,18 @@ import React, {
 import { Container, ToggleView } from './styles';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   label: string;
+  isFlex?: boolean;
   containerStyle?: object;
 }
 
-const Input: React.FC<InputProps> = ({
+const FormInput: React.FC<FormInputProps> = ({
   containerStyle,
   name,
   label,
+  isFlex = false,
   type,
   ...rest
 }) => {
@@ -47,6 +49,7 @@ const Input: React.FC<InputProps> = ({
       isFilled={isFilled}
       isFocused={isFocused}
       style={containerStyle}
+      isFlex={isFlex}
     >
       <label htmlFor={name}>{label}</label>
       <div>
@@ -74,4 +77,4 @@ const Input: React.FC<InputProps> = ({
   );
 };
 
-export default Input;
+export default FormInput;

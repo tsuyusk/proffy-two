@@ -1,12 +1,17 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+interface ContainerProps {
+  labelColor: string | undefined;
+}
+
+export const Container = styled.div<ContainerProps>`
   position: relative;
   border-radius: 8px;
   height: 64px;
   flex: 1;
 
   > label {
+    color: ${props => (props.labelColor ? props.labelColor : 'auto')};
     font-size: 14px;
   }
 
