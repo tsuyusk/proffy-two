@@ -30,6 +30,10 @@ export class CreateClassSchedulesTable1598207426511
             name: 'class_id',
             type: 'uuid',
           },
+          {
+            name: 'user_id',
+            type: 'uuid',
+          },
         ],
         foreignKeys: [
           {
@@ -37,6 +41,14 @@ export class CreateClassSchedulesTable1598207426511
             columnNames: ['class_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'classes',
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+          },
+          {
+            name: 'user_id_foreign_key',
+            columnNames: ['user_id'],
+            referencedColumnNames: ['id'],
+            referencedTableName: 'users',
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE',
           },

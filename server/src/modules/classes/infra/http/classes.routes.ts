@@ -18,7 +18,7 @@ interface Schedule {
 
 classesRouter.post('/', ensureAuthenticated, async (request, response) => {
   const { subject, cost, schedule } = request.body;
-  const user_id = request.user.id;
+  const { id: user_id } = request.user;
 
   const createClass = container.resolve(CreateClassService);
 

@@ -6,6 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import Class from '@modules/classes/infra/typeorm/entities/Class';
+import User from '@modules/users/infra/typeorm/entities/User';
 
 @Entity('class_schedules')
 export default class ClassSchedule {

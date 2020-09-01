@@ -2,7 +2,7 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  ManyToOne,
+  OneToOne,
   JoinColumn,
   OneToMany,
 } from 'typeorm';
@@ -23,7 +23,7 @@ export default class Class {
   @Column()
   user_id: string;
 
-  @ManyToOne(() => User, { eager: true })
+  @OneToOne(() => User, user => user.class)
   @JoinColumn({ name: 'user_id' })
   user: User;
 

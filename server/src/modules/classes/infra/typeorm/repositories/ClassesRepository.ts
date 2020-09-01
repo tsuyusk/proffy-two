@@ -43,6 +43,7 @@ export default class ClassesRepository implements IClassesRepository {
     if ((week_day && subject && time) || (week_day && subject && time === 0)) {
       const classesWithSameSubject = await this.ormRepository.find({
         where: { subject },
+        relations: ['user'],
       });
 
       const filteredClasses = new Set(
@@ -64,7 +65,9 @@ export default class ClassesRepository implements IClassesRepository {
       return filteredClassesInArrayType;
     }
 
-    const classes = await this.ormRepository.find();
+    const classes = await this.ormRepository.find({
+      relations: ['user'],
+    });
 
     return classes;
   }

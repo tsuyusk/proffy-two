@@ -2,10 +2,7 @@ import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
-import ICreateUsersDTO from '../dtos/ICreateUsersDTO';
 import IUsersRepository from '../repositories/IUsersRepository';
-
-import IHashProvider from '@shared/container/providers/HashProvider/models/IHashProvider';
 
 interface IRequest {
   user_id: string;
@@ -13,9 +10,7 @@ interface IRequest {
   lastName: string;
   email: string;
   bio: string;
-  whatsapp: number;
-  oldPassword?: string;
-  password?: string;
+  whatsapp: string;
 }
 
 @injectable()
@@ -23,8 +18,6 @@ class UpdateProfileService {
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
-    @inject('HashProvider')
-    private hashProvider: IHashProvider,
   ) {}
 
   public async execute({
@@ -34,8 +27,6 @@ class UpdateProfileService {
     email,
     bio,
     whatsapp,
-    password,
-    oldPassword,
   }: IRequest) {
     const user = await this.usersRepository.findById(user_id);
 
@@ -49,29 +40,15 @@ class UpdateProfileService {
       throw new AppError('Email already taken');
     }
 
-    if (password && !oldPassword) {
-      throw new AppError('Missing old password');
-    }
-
-    if (password && oldPassword) {
-      const checkOldPassword = await this.hashProvider.compare(
-        oldPassword,
-        user.password,
-      );
-
-      if (!checkOldPassword) {
-        throw new AppError('Invalid old password');
-      }
-
-      user.password = await this.hashProvider.generate(password);
-    }
-
     user.name = name;
+    user.lastName = lastName;
     user.email = email;
     user.bio = bio;
     user.whatsapp = whatsapp;
 
-    return this.usersRepository.save(user);
+    await this.usersRepository.save(user);
+
+    return user;
   }
 }
 

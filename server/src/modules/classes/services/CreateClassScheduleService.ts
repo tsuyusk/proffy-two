@@ -22,7 +22,7 @@ class CreateClassScheduleService {
   ) {}
 
   public async execute({ class_id, schedules }: IRequest) {
-    const insertIntoDatabasePromises = schedules.map(async schedule => {
+    const insertScheduleIntoDatabasePromises = schedules.map(async schedule => {
       return await this.classSchedulesRepository.create({
         class_id,
         from: convertHoursToMinutes(schedule.from),
@@ -31,7 +31,7 @@ class CreateClassScheduleService {
       });
     });
 
-    const newSchedules = await Promise.all(insertIntoDatabasePromises);
+    const newSchedules = await Promise.all(insertScheduleIntoDatabasePromises);
 
     return newSchedules;
   }

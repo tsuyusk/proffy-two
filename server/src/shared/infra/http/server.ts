@@ -7,10 +7,12 @@ import '@shared/infra/typeorm';
 
 import appRouter from './routes';
 import AppError from '@shared/errors/AppError';
+import uploadConfig from '@config/upload';
 
 const app = express();
 const port = process.env.PORT || 3333;
 
+app.use('/files', express.static(uploadConfig.tmpFolder));
 app.use(express.json());
 app.use(appRouter);
 
