@@ -15,6 +15,8 @@ Proffy is a project developed during Next Level Week 2.0, an online event made b
 
 This repository is called Proffy 2.0 because it is the second version of this project, with a lot of new functionalities, for example, Login/Register system, profile and etc.
 
+[Click here to check out the project's wireframe](https://www.figma.com/file/Agvethfp7FANyXDDU3LUfd/Proffy-Web-2.0)
+
 ## How to run in your machine ?
 
 ### Before continuing, be sure that you have:
