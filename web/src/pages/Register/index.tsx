@@ -44,8 +44,14 @@ const Register: React.FC = () => {
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
-          name: Yup.string().required('Nome obrigatório'),
-          lastName: Yup.string().required('Sobrenome obrigatório'),
+          name: Yup.string()
+            .min(2, 'Curto demais')
+            .max(30, 'Longo demais')
+            .required('Nome obrigatório'),
+          lastName: Yup.string()
+            .min(2, 'Curto demais')
+            .max(30, 'Longo demais')
+            .required('Sobrenome obrigatório'),
           email: Yup.string()
             .required('Email obrigatório')
             .email('Digite um Email valido'),

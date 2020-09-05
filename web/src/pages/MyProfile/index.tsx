@@ -125,13 +125,20 @@ const MyProfile: React.FC = () => {
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
-          name: Yup.string().required('Obrigatório'),
-          lastName: Yup.string().required('Obrigatório'),
+          name: Yup.string()
+            .min(2, 'Curto demais')
+            .max(30, 'Longo demais')
+            .required('Obrigatório'),
+          lastName: Yup.string()
+            .min(2, 'Curto demais')
+            .max(30, 'Longo demais')
+            .required('Obrigatório'),
           email: Yup.string().email('Inválido').required('Obrigatório'),
           bio: Yup.string()
             .max(300, 'Biografia grande demais')
             .required('Obrigatório'),
           whatsapp: Yup.string()
+            .min(2, 'Curto demais')
             .matches(
               /^(\d{2})[6-9]\d{8}$/,
               'Formato inválido, tente tirar o + e agrupar todos os numeros',
