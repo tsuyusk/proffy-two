@@ -133,7 +133,7 @@ const MyProfile: React.FC = () => {
             .required('Obrigatório'),
           whatsapp: Yup.string()
             .matches(
-              /^(?:(55\d{2})|\d{2})[6-9]\d{8}$/,
+              /^(\d{2})[6-9]\d{8}$/,
               'Formato inválido, tente tirar o + e agrupar todos os numeros',
             )
             .required('Obrigatorio'),
