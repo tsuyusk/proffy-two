@@ -55,6 +55,7 @@ export const Container = styled(animated.div)<ContainerProps>`
   }
   div {
     flex: 1;
+    padding: 0 4px;
     p {
       margin-top: 4px;
       font-size: 14px;

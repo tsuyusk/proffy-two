@@ -101,8 +101,12 @@ const GiveClasses: React.FC = () => {
   const handleSubmit = useCallback(
     async (data: GiveClassesFormData) => {
       try {
+        if (addClassRequestLoading) {
+          return;
+        }
         setAddClassRequestLoading(true);
         if (userData.class.schedules) {
+          setAddClassRequestLoading(false);
           addToast({
             title: 'Não foi possivel registrar uma nova aula',
             description:
@@ -145,12 +149,12 @@ const GiveClasses: React.FC = () => {
           schedule: scheduleWithFormattedWeekDay,
         });
 
+        setAddClassRequestLoading(false);
+
         addToast({
           title: 'Aula criada com sucesso!',
           type: 'success',
         });
-
-        setAddClassRequestLoading(false);
 
         history.push('/completed-creation');
       } catch (error) {
@@ -168,7 +172,7 @@ const GiveClasses: React.FC = () => {
         });
       }
     },
-    [history, userData.class, addToast],
+    [history, userData.class, addToast, addClassRequestLoading],
   );
 
   useEffect(() => {
