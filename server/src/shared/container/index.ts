@@ -12,6 +12,9 @@ import ClassesRepository from '@modules/classes/infra/typeorm/repositories/Class
 import IClassSchedulesRepository from '@modules/classes/repositories/IClassSchedulesRepository';
 import ClassSchedulesRepository from '@modules/classes/infra/typeorm/repositories/ClassSchedulesRepository';
 
+import IConnectionsRepository from '@modules/connections/repositories/IConnectionsRepository';
+import ConnectionsRepository from '@modules/connections/infra/typeorm/repository/ConnectionsRepository';
+
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
   UsersRepository,
@@ -27,4 +30,9 @@ container.registerSingleton<IClassesRepository>(
 container.registerSingleton<IClassSchedulesRepository>(
   'ClassSchedulesRepository',
   ClassSchedulesRepository,
+);
+
+container.registerSingleton<IConnectionsRepository>(
+  'ConnectionsRepository',
+  ConnectionsRepository,
 );

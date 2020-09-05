@@ -5,12 +5,17 @@
   "license": "MIT",
   "scripts": {
     "dev:server": "nodemon --ignore 'node_modules/*' --exec ts-node -r tsconfig-paths/register --transpile-only src/shared/infra/http/server.ts",
+    "start": "node dist/shared/infra/http/server.js",
     "start:ts": "ts-node -r tsconfig-paths/register --transpile-only src/shared/infra/http/server.ts",
     "typeorm": "ts-node -r tsconfig-paths/register --transpile-only node_modules/typeorm/cli.js"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.7",
+    "@types/date-fns": "^2.6.0",
+    "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.7",
+    "@types/hapi__joi": "^17.1.4",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/multer": "^1.4.4",
     "nodemon": "^2.0.4",
@@ -22,7 +27,11 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "celebrate": "^13.0.1",
     "class-transformer": "^0.3.1",
+    "cors": "^2.8.5",
+    "date-fns": "^2.16.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^8.5.1",

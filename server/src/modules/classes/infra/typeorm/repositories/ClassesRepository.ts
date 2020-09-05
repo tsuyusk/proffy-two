@@ -1,8 +1,8 @@
-import { Repository, getRepository, Cursor } from 'typeorm';
+import { Repository, getRepository } from 'typeorm';
 import Class from '../entities/Class';
 import IClassesRepository from '@modules/classes/repositories/IClassesRepository';
 import ICreateClassDTO from '@modules/classes/dtos/ICreateClassDTO';
-import IFindClassByUserIdDTO from '@modules/classes/dtos/IFindClassByUserIdDTO';
+import IFindClassByUserIdAndSubjectDTO from '@modules/classes/dtos/IFindClassByUserIdAndSubjectDTO';
 import IFindAllClassesDTO from '@modules/classes/dtos/IFindAllClassesDTO';
 
 export default class ClassesRepository implements IClassesRepository {
@@ -24,10 +24,18 @@ export default class ClassesRepository implements IClassesRepository {
     return newClass;
   }
 
-  public async findClassByUserId({
+  public async findClassByUserId(user_id: string): Promise<Class | undefined> {
+    const searchedClass = await this.ormRepository.findOne({
+      where: { user_id },
+    });
+
+    return searchedClass;
+  }
+
+  public async findClassByUserIdAndSubject({
     user_id,
     subject,
-  }: IFindClassByUserIdDTO): Promise<Class | undefined> {
+  }: IFindClassByUserIdAndSubjectDTO): Promise<Class | undefined> {
     const searchedClass = await this.ormRepository.findOne({
       where: { user_id, subject },
     });
@@ -40,7 +48,12 @@ export default class ClassesRepository implements IClassesRepository {
     subject,
     time,
   }: IFindAllClassesDTO): Promise<Class[]> {
-    if ((week_day && subject && time) || (week_day && subject && time === 0)) {
+    if (
+      (week_day && subject && time) ||
+      (week_day && subject && time === 0) ||
+      (week_day === 0 && subject && time) ||
+      (week_day === 0 && subject && time === 0)
+    ) {
       const classesWithSameSubject = await this.ormRepository.find({
         where: { subject },
         relations: ['user'],
@@ -70,5 +83,9 @@ export default class ClassesRepository implements IClassesRepository {
     });
 
     return classes;
+  }
+
+  public async save(selectedClass: Class) {
+    return this.ormRepository.save(selectedClass);
   }
 }

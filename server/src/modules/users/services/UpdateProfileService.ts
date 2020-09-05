@@ -40,6 +40,10 @@ class UpdateProfileService {
       throw new AppError('Email already taken');
     }
 
+    if (bio.length > 300) {
+      throw new AppError('Biography too long');
+    }
+
     user.name = name;
     user.lastName = lastName;
     user.email = email;

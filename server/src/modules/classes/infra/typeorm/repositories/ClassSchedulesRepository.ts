@@ -28,6 +28,32 @@ class ClassSchedulesRepository implements IClassSchedulesRepository {
 
     return classSchedule;
   }
+
+  public async saveMultiple(classSchedules: ClassSchedule[]) {
+    const insertSchedulesIntoDatabasePromises = classSchedules.map(
+      async classSchedule => {
+        return this.ormRepository.save(classSchedule);
+      },
+    );
+
+    const insertedSchedules = await Promise.all(
+      insertSchedulesIntoDatabasePromises,
+    );
+
+    return insertedSchedules;
+  }
+
+  public async save(classSchedule: ClassSchedule) {
+    return this.ormRepository.save(classSchedule);
+  }
+
+  public async findAllByClassId(class_id: string) {
+    const selectedClassSchedule = await this.ormRepository.find({
+      where: { class_id },
+    });
+
+    return selectedClassSchedule;
+  }
 }
 
 export default ClassSchedulesRepository;

@@ -19,6 +19,10 @@ class UpdateAvatarService {
   public async execute({ user_id, avatar }: IRequest) {
     const user = await this.usersRepository.findById(user_id);
 
+    if (!avatar) {
+      throw new AppError('Missing avatar');
+    }
+
     if (!user) {
       throw new AppError('User does not exist');
     }

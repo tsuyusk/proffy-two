@@ -2,6 +2,7 @@ import { inject, injectable } from 'tsyringe';
 import IClassesRepository from '../repositories/IClassesRepository';
 import ICreateClassDTO from '../dtos/ICreateClassDTO';
 import AppError from '@shared/errors/AppError';
+import verifySubject from '@shared/utils/verifySubject';
 
 interface IRequest extends ICreateClassDTO {}
 
@@ -12,16 +13,15 @@ class CreateClassService {
     private classesRepository: IClassesRepository,
   ) {}
   public async execute({ subject, cost, user_id }: IRequest) {
-    const hasClassWithSameSubjectFromUser = await this.classesRepository.findClassByUserId(
-      {
-        subject,
-        user_id,
-      },
+    const hasClassFromUser = await this.classesRepository.findClassByUserId(
+      user_id,
     );
 
-    if (hasClassWithSameSubjectFromUser) {
-      throw new AppError('You cannot create two classes with same subject');
+    if (hasClassFromUser) {
+      throw new AppError('You cannot create two classes');
     }
+
+    verifySubject(subject);
 
     const newClass = await this.classesRepository.create({
       subject,

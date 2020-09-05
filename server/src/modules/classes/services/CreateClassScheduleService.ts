@@ -1,6 +1,8 @@
 import { injectable, inject } from 'tsyringe';
+import { isBefore } from 'date-fns';
+
+import AppError from '@shared/errors/AppError';
 import IClassSchedulesRepository from '../repositories/IClassSchedulesRepository';
-import ICreateClassScheduleDTO from '../dtos/ICreateClassScheduleDTO';
 import convertHoursToMinutes from '@shared/utils/convertHoursToMinutes';
 
 interface IRequest {
@@ -23,11 +25,23 @@ class CreateClassScheduleService {
 
   public async execute({ class_id, schedules }: IRequest) {
     const insertScheduleIntoDatabasePromises = schedules.map(async schedule => {
-      return await this.classSchedulesRepository.create({
+      const { from, to, week_day } = schedule;
+
+      const fromInMinutes = convertHoursToMinutes(from);
+      const toInMinutes = convertHoursToMinutes(to);
+
+      const fromScheduleDate = new Date().setMinutes(fromInMinutes);
+      const toScheduleDate = new Date().setMinutes(toInMinutes);
+
+      if (isBefore(toScheduleDate, fromScheduleDate)) {
+        throw new AppError('Invalid schedule');
+      }
+
+      return this.classSchedulesRepository.create({
         class_id,
-        from: convertHoursToMinutes(schedule.from),
-        to: convertHoursToMinutes(schedule.to),
-        week_day: schedule.week_day,
+        from: fromInMinutes,
+        to: toInMinutes,
+        week_day: week_day,
       });
     });
 
