@@ -1,6 +1,16 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useTheme } from 'styled-components';
+import ReactLoading from 'react-loading';
+import { FiSearch } from 'react-icons/fi';
+import * as Yup from 'yup';
 
+import subjects from '../../constants/subjects';
+import weekDays from '../../constants/weekDays';
+import CustomisableHeader from '../../components/organisms/CustomisableHeader';
+import TeacherItem, { ClassData } from '../../components/organisms/TeacherItem';
+import Select from '../../components/atoms/Select';
+import api from '../../services/api';
 import {
   Container,
   HeaderContent,
@@ -8,65 +18,129 @@ import {
   HeaderForm,
   LabelAndInput,
   FormInput,
+  NoClassesMessageContainer,
+  LoadingContainer,
 } from './styles';
-import CustomisableHeader from '../../components/organisms/CustomisableHeader';
-import TeacherItem, { ClassData } from '../../components/organisms/TeacherItem';
-import Select from '../../components/atoms/Select';
-import { useTheme } from 'styled-components';
+import { useToast } from '../../hooks/toast';
+import { FormHandles } from '@unform/core';
+import getValidationErrors from '../../utils/getValidationErrors';
 
-const sampleClass: ClassData = {
-  class: {
-    cost: 'R$ 25',
-    id: 'uuid',
-    subject: 'Matemática',
-    user: {
-      bio: "I'm an art teacher",
-      name: 'Tiago',
-      lastName: 'Luchtenberg',
-      whatsapp: '59907634853',
-      avatar_url:
-        'https://avatars3.githubusercontent.com/u/53716129?s=460&u=edacca5253ac7c836de527f0abd9d07c5bf72479&v=4',
-    },
-  },
-  schedule: [
-    {
-      week_day: 1,
-      from: 480,
-      to: 720,
-    },
-    {
-      week_day: 2,
-      from: 480,
-      to: 720,
-    },
-  ],
-};
+interface HeaderFormData {
+  subject: string;
+  week_day: string;
+  time: string;
+}
 
 const TeacherList: React.FC = () => {
+  const formRef = useRef<FormHandles | null>(null);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [loadingClasses, setLoadingClasses] = useState(true);
+  const [classes, setClasses] = useState<ClassData[]>([]);
   const history = useHistory();
-  const { baseTextColorInPurple } = useTheme();
+  const { addToast } = useToast();
+  const { baseTextColorInPurple, purple } = useTheme();
+
+  const handleSubmit = useCallback(
+    async (data: HeaderFormData) => {
+      try {
+        setLoadingClasses(true);
+
+        formRef.current?.setErrors({});
+
+        const schema = Yup.object().shape({
+          subject: Yup.string().required('Obrigatório'),
+          week_day: Yup.string().required('Obrigatório'),
+          time: Yup.string().required('Obrigatório'),
+        });
+
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+
+        const { subject, week_day, time } = data;
+
+        const response = await api.get<ClassData[]>('/classes', {
+          params: { subject, week_day, time },
+        });
+        const teachersDataWithFormattedCost = response.data.map(classItem => ({
+          ...classItem,
+          formattedCost: Number(classItem.cost).toLocaleString('pt-BR', {
+            currency: 'BRL',
+            style: 'currency',
+          }),
+        }));
+
+        setHasSearched(true);
+        setClasses(teachersDataWithFormattedCost);
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(error);
+          formRef.current?.setErrors(errors);
+          return;
+        }
+
+        addToast({
+          title: 'Algo deu errado',
+          description:
+            'Algo deu errado durante o carregamento dos dados dos professores, tente novamente mais tarde',
+          type: 'error',
+        });
+      } finally {
+        setLoadingClasses(false);
+      }
+    },
+    [addToast],
+  );
 
   const handleGoBack = useCallback(() => {
     history.push('/landing');
   }, [history]);
+
+  useEffect(() => {
+    async function loadTeachers() {
+      try {
+        const response = await api.get<ClassData[]>('/classes');
+
+        const teachersDataWithFormattedCost = response.data.map(classItem => ({
+          ...classItem,
+          formattedCost: Number(classItem.cost).toLocaleString('pt-BR', {
+            currency: 'BRL',
+            style: 'currency',
+          }),
+        }));
+
+        setClasses(teachersDataWithFormattedCost);
+      } catch {
+        addToast({
+          title: 'Algo deu errado',
+          description:
+            'Algo deu errado durante o carregamento dos dados dos professores, tente novamente mais tarde',
+          type: 'error',
+        });
+      } finally {
+        setLoadingClasses(false);
+      }
+    }
+    loadTeachers();
+  }, [addToast]);
 
   return (
     <Container>
       <CustomisableHeader pageName="Estudar" handleGoBack={handleGoBack}>
         <HeaderContent>
           <h1>Estes são os proffys disponíveis</h1>
-          <HeaderForm>
+          <HeaderForm ref={formRef} onSubmit={handleSubmit}>
             <Select
               labelColor={baseTextColorInPurple}
               label="Matéria"
               name="subject"
-              options={[]}
+              options={subjects}
             />
             <Select
               labelColor={baseTextColorInPurple}
               label="Dia da semana"
               name="week_day"
-              options={[]}
+              options={weekDays}
             />
 
             <LabelAndInput>
@@ -80,14 +154,32 @@ const TeacherList: React.FC = () => {
                 isFlex={true}
               />
             </LabelAndInput>
+            <button type="submit">
+              <FiSearch size={25} />
+            </button>
           </HeaderForm>
         </HeaderContent>
       </CustomisableHeader>
-      <List>
-        <TeacherItem classData={sampleClass} />
-        <TeacherItem classData={sampleClass} />
-        <TeacherItem classData={sampleClass} />
-      </List>
+      {loadingClasses ? (
+        <LoadingContainer>
+          <ReactLoading type="spin" color={purple} />
+        </LoadingContainer>
+      ) : (
+        <List>
+          {classes.length === 0 && (
+            <NoClassesMessageContainer>
+              <p>
+                {hasSearched
+                  ? 'Nenhum professor encontrado com sua pesquisa.'
+                  : 'Nenhum professor encontrado'}
+              </p>
+            </NoClassesMessageContainer>
+          )}
+          {classes.map(classItem => (
+            <TeacherItem classData={classItem} key={classItem.id} />
+          ))}
+        </List>
+      )}
     </Container>
   );
 };

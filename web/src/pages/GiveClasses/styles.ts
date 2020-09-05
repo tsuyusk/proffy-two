@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Form as UnformForm } from '@unform/web';
 
 export const Container = styled.div`
   display: flex;
@@ -27,8 +28,9 @@ export const HeaderContent = styled.div`
   }
 `;
 
-export const Form = styled.form`
+export const Form = styled(UnformForm)`
   display: flex;
+  border-radius: 8px;
   flex-direction: column;
   background: ${props => props.theme.shape};
   width: 100%;
@@ -86,16 +88,17 @@ export const ProfileAndInputContainer = styled.div`
 export const ProfileContainer = styled.div`
   display: flex;
   align-items: center;
-  max-width: 320px;
+  max-width: 250px;
   width: 100%;
   > img {
     margin-left: 10px;
     height: 80px;
     width: 80px;
+    border-radius: 50%;
   }
   > h3 {
     width: fit-content;
-    margin: 0 24px 0 auto;
+    margin: 0 32px 0 auto;
   }
 `;
 

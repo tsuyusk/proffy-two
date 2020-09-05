@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Form } from '@unform/web';
 import AtomFormInput from '../../components/atoms/FormInput';
 
 export const Container = styled.div``;
@@ -17,7 +18,7 @@ export const HeaderContent = styled.div`
   }
 `;
 
-export const HeaderForm = styled.form`
+export const HeaderForm = styled(Form)`
   display: flex;
   align-items: center;
   width: 100%;
@@ -26,6 +27,21 @@ export const HeaderForm = styled.form`
 
   > * {
     margin-left: 10px;
+  }
+
+  > button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+
+    color: ${props => props.theme.shape};
+    border-radius: 8px;
+    border: 0;
+    background: ${props => props.theme.green};
+    margin-top: 25px;
+    height: 80%;
+    width: 50px;
   }
 `;
 
@@ -48,5 +64,27 @@ export const List = styled.div`
   flex-direction: column;
   width: 100%;
   max-width: 740px;
+  margin: 20px auto 0;
+`;
+
+export const NoClassesMessageContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 250px;
+
+  > p {
+    text-align: center;
+  }
+`;
+
+export const LoadingContainer = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 740px;
+  height: 350px;
   margin: 20px auto 0;
 `;

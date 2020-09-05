@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Form as UnformForm } from '@unform/web';
 import { shade } from 'polished';
 
 import proffyBg from '../../assets/background-proffy.svg';
@@ -29,6 +30,7 @@ export const UserProfile = styled.div`
     width: 180px;
     height: 180px;
     border-radius: 50%;
+    object-fit: cover;
   }
 
   > input {
@@ -55,12 +57,17 @@ export const UploadButton = styled.label`
   &:hover {
     background: ${props => shade(0.2, props.theme.green)};
   }
+
+  > div {
+    margin: auto;
+  }
 `;
 
-export const Form = styled.form`
+export const Form = styled(UnformForm)`
   display: flex;
   flex-direction: column;
   background: ${props => props.theme.shape};
+  border-radius: 8px;
   width: 100%;
   max-width: 740px;
   margin: -32px auto 32px;
@@ -142,6 +149,12 @@ export const LabelAndInput = styled.div`
     color: ${props => props.theme.inputTextColor};
     font-size: 14px;
   }
+`;
+
+export const RemoveButton = styled.button`
+  margin: 0 auto;
+  padding: 4px;
+  color: ${props => props.theme.redDelete};
 `;
 
 export const AlertMessage = styled.div`

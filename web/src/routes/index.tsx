@@ -25,11 +25,15 @@ const Routes: React.FC = () => {
       <Route component={ForgotPassword} path="/forgot-password" />
       <Route component={SentEmail} path="/sent-email" />
 
-      <Route component={Landing} path="/landing" />
-      <Route component={MyProfile} path="/me" />
-      <Route component={GiveClasses} path="/give-classes" />
-      <Route component={CompletedCreation} path="/completed-creation" />
-      <Route component={TeacherList} path="/study" />
+      <Route component={Landing} path="/landing" isPrivate />
+      <Route component={MyProfile} path="/me" isPrivate />
+      <Route component={GiveClasses} path="/give-classes" isPrivate />
+      <Route
+        component={CompletedCreation}
+        path="/completed-creation"
+        isPrivate
+      />
+      <Route component={TeacherList} path="/study" isPrivate />
       <Route component={Error404} path="*" />
     </Switch>
   );

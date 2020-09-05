@@ -1,9 +1,17 @@
-import React, { SelectHTMLAttributes } from 'react';
+import React, {
+  useRef,
+  useEffect,
+  SelectHTMLAttributes,
+  useState,
+  useCallback,
+  ChangeEvent,
+} from 'react';
+import { useField } from '@unform/core';
 
-import { Container } from './styles';
+import { Container, ErrorMessage } from './styles';
 
 interface Option {
-  value: string;
+  value: string | number;
   label: string;
 }
 
@@ -25,11 +33,57 @@ const Select: React.FC<SelectProps> = ({
   containerStyle,
   ...rest
 }) => {
+  const [selectedOption, setSelectedOption] = useState('');
+  const [isHovered, setIsHovered] = useState(false);
+  const selectRef = useRef<HTMLSelectElement>(null);
+  const { fieldName, defaultValue, error, registerField } = useField(name);
+
+  useEffect(() => {
+    registerField({
+      name: fieldName,
+      ref: selectRef.current,
+      getValue: () => {
+        return selectedOption;
+      },
+    });
+  }, [fieldName, registerField, selectedOption]);
+
+  useEffect(() => {
+    setSelectedOption(defaultValue);
+  }, [defaultValue]);
+
+  const handleHoverInput = useCallback(() => {
+    setIsHovered(true);
+  }, []);
+
+  const handleStopHoveringInput = useCallback(() => {
+    setIsHovered(false);
+  }, []);
+
+  const handleChangeOption = useCallback(
+    (event: ChangeEvent<HTMLSelectElement>) => {
+      setSelectedOption(event.target.value);
+    },
+    [],
+  );
+
   return (
-    <Container labelColor={labelColor} style={containerStyle}>
+    <Container
+      hasError={!!error}
+      labelColor={labelColor}
+      style={containerStyle}
+    >
       <label htmlFor={name}>{label}</label>
-      <select value="" id={name} {...rest}>
-        <option value="" disabled hidden>
+      <select
+        onMouseOver={handleHoverInput}
+        onMouseLeave={handleStopHoveringInput}
+        value={selectedOption}
+        onChange={handleChangeOption}
+        ref={selectRef}
+        id={name}
+        {...rest}
+      >
+        <option disabled hidden value="">
           Selecione uma opção
         </option>
         {options.map(option => (
@@ -38,6 +92,9 @@ const Select: React.FC<SelectProps> = ({
           </option>
         ))}
       </select>
+      <ErrorMessage hasError={!!error} isHovered={isHovered}>
+        <div>{error}</div>
+      </ErrorMessage>
     </Container>
   );
 };

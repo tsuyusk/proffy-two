@@ -2,11 +2,13 @@ import React, {
   InputHTMLAttributes,
   useState,
   useRef,
+  useEffect,
   useCallback,
 } from 'react';
+import { useField } from '@unform/core';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
-import { Container, CheckboxContainer, ToggleView } from './styles';
+import { Container, ToggleView, ErrorMessage } from './styles';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -19,12 +21,33 @@ const Input: React.FC<InputProps> = ({
   label,
   type,
   name,
+  defaultValue: propDefaultValue,
   ...rest
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
+
+  const { fieldName, error, defaultValue, registerField } = useField(name);
+
+  useEffect(() => {
+    registerField({
+      name: fieldName,
+      ref: inputRef.current,
+      path: 'value',
+    });
+    setIsFilled(!!inputRef.current?.value);
+  }, [fieldName, registerField]);
+
+  const handleHoverInput = useCallback(() => {
+    setIsHovered(true);
+  }, []);
+
+  const handleStopHoveringInput = useCallback(() => {
+    setIsHovered(false);
+  }, []);
 
   const handleInputFocus = useCallback(() => {
     setIsFocused(true);
@@ -40,21 +63,16 @@ const Input: React.FC<InputProps> = ({
     setIsVisible(state => !state);
   }, []);
 
-  if (type === 'checkbox') {
-    return (
-      <CheckboxContainer>
-        <input ref={inputRef} id={name} type="checkbox" />
-        <label htmlFor={name}>{label}</label>
-      </CheckboxContainer>
-    );
-  }
-
   return (
     <Container
+      onMouseOver={handleHoverInput}
+      onMouseLeave={handleStopHoveringInput}
       htmlFor={name}
       type={type}
       isFilled={isFilled}
       isFocused={isFocused}
+      hasError={!!error}
+      hasValueInProps={!!propDefaultValue}
       style={containerStyle}
     >
       <label htmlFor={name}>{label}</label>
@@ -62,8 +80,10 @@ const Input: React.FC<InputProps> = ({
         <input
           id={name}
           ref={inputRef}
+          defaultValue={propDefaultValue || defaultValue}
           onBlur={handleInputBlur}
           onFocus={handleInputFocus}
+          autoComplete="off"
           type={
             type === 'password'
               ? isVisible
@@ -79,6 +99,9 @@ const Input: React.FC<InputProps> = ({
           </ToggleView>
         )}
       </div>
+      <ErrorMessage hasError={!!error} isHovered={isHovered}>
+        <div>{error}</div>
+      </ErrorMessage>
     </Container>
   );
 };

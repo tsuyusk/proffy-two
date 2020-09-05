@@ -1,11 +1,41 @@
-import styled, { css } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 interface ContainerProps {
   type?: string;
   isFocused: boolean;
   isFilled: boolean;
   isFlex: boolean;
+  hasError: boolean;
 }
+
+const shake = keyframes`
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+`;
+
+const appearFromBottom = keyframes`
+  0% {
+    opacity: 0;
+    top: -20px;
+  }
+
+  100% {
+    opacity: 0.9;
+  }
+`;
 
 export const Container = styled.label<ContainerProps>`
   position: relative;
@@ -27,6 +57,13 @@ export const Container = styled.label<ContainerProps>`
   border: 1px solid ${props => props.theme.linesInWhite};
   background: ${props => props.theme.shape2};
 
+  ${props =>
+    props.hasError &&
+    css`
+      border-color: ${props => props.theme.redDelete};
+      animation: ${shake} 0.82s ease-out;
+    `}
+
   > label {
     position: absolute;
     font-size: 14px;
@@ -40,7 +77,7 @@ export const Container = styled.label<ContainerProps>`
     ${props =>
       (props.isFocused || props.isFilled) &&
       css`
-        top: 15%;
+        top: 20%;
       `}
   }
 
@@ -54,6 +91,12 @@ export const Container = styled.label<ContainerProps>`
     background: ${props => props.theme.purple};
     transform: scale(0, 0);
     transition: transform 0.3s ease-out;
+
+    ${props =>
+      props.hasError &&
+      css`
+        background: ${props => props.theme.redDelete};
+      `}
 
     ${props =>
       (props.isFilled || props.isFocused) &&
@@ -81,4 +124,49 @@ export const ToggleView = styled.button`
   width: 24px;
   height: 24px;
   margin-right: 5px;
+`;
+
+interface ErrorMessageProps {
+  hasError: boolean;
+  isHovered: boolean;
+}
+
+export const ErrorMessage = styled.div<ErrorMessageProps>`
+  position: absolute;
+  display: none;
+  height: fit-content !important;
+
+  > div {
+    display: none;
+  }
+
+  ${props =>
+    props.isHovered &&
+    props.hasError &&
+    css`
+      display: block;
+      > div {
+        position: relative;
+        display: block;
+        padding: 4px;
+        top: -50px;
+        background: ${props => props.theme.redDelete};
+        color: #fff;
+        border-radius: 4px;
+        transition: opacity 0.19s ease-out;
+        animation: ${appearFromBottom} 0.2s ease-out;
+        opacity: 0.9;
+
+        &::before {
+          position: absolute;
+          bottom: -10px;
+          content: '';
+          width: 0;
+          height: 0;
+          border-left: 20px solid transparent;
+          border-right: 20px solid transparent;
+          border-top: 20px solid ${props => props.theme.redDelete};
+        }
+      }
+    `}
 `;

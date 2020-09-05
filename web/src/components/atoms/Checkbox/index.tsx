@@ -1,6 +1,7 @@
-import React, { InputHTMLAttributes, useRef } from 'react';
+import React, { InputHTMLAttributes, useRef, useEffect } from 'react';
 
 import { CheckboxContainer } from './styles';
+import { useField } from '@unform/core';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -9,6 +10,18 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const Checkbox: React.FC<InputProps> = ({ label, type, name, ...rest }) => {
   const checkboxRef = useRef<HTMLInputElement>(null);
+
+  const { fieldName, registerField } = useField(name);
+
+  useEffect(() => {
+    registerField({
+      name: fieldName,
+      ref: checkboxRef.current,
+      getValue: (ref: any) => {
+        return ref.checked;
+      },
+    });
+  }, [registerField, fieldName]);
 
   return (
     <CheckboxContainer>

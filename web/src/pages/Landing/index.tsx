@@ -1,4 +1,5 @@
-import React, { useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import api from '../../services/api';
 import { useHistory } from 'react-router-dom';
 import { useTheme } from 'styled-components';
 import { FiBookOpen, FiTv } from 'react-icons/fi';
@@ -20,7 +21,17 @@ import {
 
 const Landing: React.FC = () => {
   const history = useHistory();
+  const [connections, setConnections] = useState(0);
   const { purple, green } = useTheme();
+
+  useEffect(() => {
+    async function loadData() {
+      const response = await api.get('/connections');
+
+      setConnections(response.data.amount);
+    }
+    loadData();
+  }, []);
 
   const handleGoToGiveClasses = useCallback(() => {
     history.push('/give-classes');
@@ -48,7 +59,8 @@ const Landing: React.FC = () => {
             <strong>O que deseja fazer?</strong>
           </p>
           <span>
-            Total de 285 conexões já realizadas{' '}
+            Total de {connections} {connections === 1 ? 'conexão' : 'conexões'}{' '}
+            já realizadas{' '}
             <span role="img" aria-label="purple heart">
               💜
             </span>

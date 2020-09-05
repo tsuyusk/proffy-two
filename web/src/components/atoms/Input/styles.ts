@@ -1,10 +1,41 @@
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
 interface ContainerProps {
   type?: string;
   isFocused: boolean;
   isFilled: boolean;
+  hasValueInProps: boolean;
+  hasError: boolean;
 }
+
+const shake = keyframes`
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+`;
+
+const appearFromBottom = keyframes`
+  0% {
+    opacity: 0;
+    top: -20px;
+  }
+
+  100% {
+    opacity: 0.9;
+  }
+`;
 
 export const Container = styled.label<ContainerProps>`
   position: relative;
@@ -19,6 +50,19 @@ export const Container = styled.label<ContainerProps>`
   border: 1px solid ${props => props.theme.linesInWhite};
   background: ${props => props.theme.shape2};
 
+  ${props =>
+    props.hasError &&
+    css`
+      border-color: ${props => props.theme.redDelete};
+      animation: ${shake} 0.82s ease-out;
+    `}
+
+  ${props =>
+    props.hasValueInProps &&
+    css`
+      cursor: not-allowed;
+    `};
+
   > label {
     position: absolute;
     cursor: text;
@@ -31,7 +75,7 @@ export const Container = styled.label<ContainerProps>`
     ${props =>
       (props.isFocused || props.isFilled) &&
       css`
-        top: 10%;
+        top: 20%;
       `};
   }
 
@@ -51,6 +95,12 @@ export const Container = styled.label<ContainerProps>`
     transition: transform 0.3s ease-out;
 
     ${props =>
+      props.hasError &&
+      css`
+        background: ${props => props.theme.redDelete};
+      `}
+
+    ${props =>
       (props.isFilled || props.isFocused) &&
       css`
         transform: scale(1, 1);
@@ -68,6 +118,11 @@ export const Container = styled.label<ContainerProps>`
       background: transparent;
       border: 0;
       margin-bottom: 4px;
+      ${props =>
+        props.hasValueInProps &&
+        css`
+          color: ${props => props.theme.complementTextColor};
+        `};
     }
   }
 `;
@@ -89,4 +144,48 @@ export const ToggleView = styled.button`
   > svg {
     color: ${props => props.theme.purple};
   }
+`;
+
+interface ErrorMessageProps {
+  hasError: boolean;
+  isHovered: boolean;
+}
+
+export const ErrorMessage = styled.div<ErrorMessageProps>`
+  position: absolute;
+  display: none;
+  height: fit-content !important;
+
+  > div {
+    display: none;
+  }
+
+  ${props =>
+    props.isHovered &&
+    props.hasError &&
+    css`
+      display: block;
+      > div {
+        position: relative;
+        display: block;
+        padding: 4px;
+        top: -50px;
+        background: ${props => props.theme.redDelete};
+        color: #fff;
+        border-radius: 4px;
+        transition: opacity 0.19s ease-out;
+        animation: ${appearFromBottom} 0.2s ease-out;
+        opacity: 0.9;
+        &::before {
+          position: absolute;
+          bottom: -10px;
+          content: '';
+          width: 0;
+          height: 0;
+          border-left: 20px solid transparent;
+          border-right: 20px solid transparent;
+          border-top: 20px solid ${props => props.theme.redDelete};
+        }
+      }
+    `}
 `;

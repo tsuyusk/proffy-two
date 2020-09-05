@@ -22,6 +22,7 @@ export const UserContainer = styled.button`
     margin-right: 20px;
     width: 40px;
     height: 40px;
+    object-fit: cover;
     border-radius: 50%;
   }
 

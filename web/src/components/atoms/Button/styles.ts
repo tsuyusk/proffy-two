@@ -23,3 +23,9 @@ export const Container = styled.button`
       color: ${props => props.theme.complementTextColor};
     `};
 `;
+
+export const LoadingContainer = styled.div`
+  margin: auto;
+  width: fit-content;
+  height: fit-content;
+`;

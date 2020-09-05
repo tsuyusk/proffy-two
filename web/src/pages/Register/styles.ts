@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { Form as UnformForm } from '@unform/web';
 import backgroundImage from '../../assets/proffy-bg.png';
 
 export const Container = styled.div`
@@ -37,7 +38,7 @@ export const ContentWrapper = styled.div`
   background: ${props => props.theme.background};
 `;
 
-export const Form = styled.form`
+export const Form = styled(UnformForm)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;

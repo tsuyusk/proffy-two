@@ -1,19 +1,18 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from 'styled-components';
+import { GlobalCss } from './css/Global';
 
 import Routes from './routes';
-import defaultTheme from './css/themes/defaultTheme';
-import { GlobalCss } from './css/Global';
+import RootProvider from './hooks';
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <RootProvider>
       <GlobalCss />
       <BrowserRouter>
         <Routes />
       </BrowserRouter>
-    </ThemeProvider>
+    </RootProvider>
   );
 };
 

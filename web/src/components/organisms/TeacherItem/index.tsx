@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import {
   Container,
@@ -9,22 +9,25 @@ import {
   Footer,
   Button,
 } from './styles';
+import weekDays from '../../../constants/weekDays';
 import convertMinutesToHours from '../../../utils/convertMinutesToHours';
+import api from '../../../services/api';
+import subjects from '../../../constants/subjects';
 
 export interface ClassData {
-  class: {
+  id: string;
+  subject: string;
+  cost: string;
+  formattedCost: string;
+  user: {
     id: string;
-    subject: string;
-    cost: string;
-    user: {
-      name: string;
-      bio: string;
-      lastName: string;
-      avatar_url: string;
-      whatsapp: string;
-    };
+    name: string;
+    bio: string;
+    lastName: string;
+    avatar_url: string;
+    whatsapp: string;
   };
-  schedule: Array<{
+  schedules: Array<{
     week_day: number;
     from: number;
     to: number;
@@ -36,53 +39,59 @@ interface TeacherItemProps {
 }
 
 const TeacherItem: React.FC<TeacherItemProps> = ({ classData }) => {
-  const daysOfWeek = useMemo(() => {
-    return [
-      { day: 0, name: 'Domingo' },
-      { day: 1, name: 'Segunda' },
-      { day: 2, name: 'Terça' },
-      { day: 3, name: 'Quarta' },
-      { day: 4, name: 'Quinta' },
-      { day: 5, name: 'Sexta' },
-      { day: 6, name: 'Sábado' },
-    ];
-  }, []);
+  const handleContact = useCallback(async () => {
+    await api.post('/connections', {
+      user_id: classData.user.id,
+    });
+
+    window.open(`https://wa.me/${classData.user.whatsapp}`, '_blank');
+  }, [classData.user.id, classData.user.whatsapp]);
+
+  const classSubject = useMemo(() => {
+    return (
+      subjects.find(subject => subject.value === classData.subject)?.label || ''
+    );
+  }, [classData]);
 
   return (
     <Container>
       <ProfileContainer>
-        <img
-          src={classData.class.user.avatar_url}
-          alt={classData.class.user.name}
-        />
+        {classData.user.avatar_url ? (
+          <img src={classData.user.avatar_url} alt={classData.user.name} />
+        ) : (
+          <img
+            src="https://image.flaticon.com/icons/png/512/0/14.png"
+            alt="Black circle"
+          />
+        )}
         <div>
           <strong>
-            {classData.class.user.name} {classData.class.user.lastName}
+            {classData.user.name} {classData.user.lastName}
           </strong>
-          <span>{classData.class.subject}</span>
+          <span>{classSubject}</span>
         </div>
       </ProfileContainer>
 
-      <Description>{classData.class.user.bio}</Description>
+      <Description>{classData.user.bio}</Description>
 
       <ScheduleContainer>
-        {daysOfWeek.map(dayOfWeek => (
-          <ScheduleItem disabled={false} key={dayOfWeek.name}>
+        {weekDays.map(weekDay => (
+          <ScheduleItem disabled={false} key={weekDay.label}>
             <span>Dia</span>
-            <strong>{dayOfWeek.name}</strong>
+            <strong>{weekDay.label}</strong>
             <span>Horário</span>
             <strong>
-              {classData.schedule.find(
-                scheduleItem => scheduleItem.week_day === dayOfWeek.day,
+              {classData.schedules.find(
+                schedulesItem => schedulesItem.week_day === weekDay.value,
               )
                 ? `${convertMinutesToHours(
-                    classData.schedule.find(
-                      scheduleItem => scheduleItem.week_day === dayOfWeek.day,
-                    )?.from || 0,
+                    classData.schedules.find(
+                      schedulesItem => schedulesItem.week_day === weekDay.value,
+                    )!.from,
                   )} - ${convertMinutesToHours(
-                    classData.schedule.find(
-                      scheduleItem => scheduleItem.week_day === dayOfWeek.day,
-                    )?.to || 0,
+                    classData.schedules.find(
+                      schedulesItem => schedulesItem.week_day === weekDay.value,
+                    )!.to,
                   )}`
                 : '-'}
             </strong>
@@ -93,10 +102,10 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ classData }) => {
       <Footer>
         <div>
           <span>Preço/hora</span>
-          <strong>{classData.class.cost}</strong>
+          <strong>{classData.formattedCost}</strong>
         </div>
 
-        <Button>
+        <Button onClick={handleContact}>
           <span>Entrar em contato</span>
         </Button>
       </Footer>
